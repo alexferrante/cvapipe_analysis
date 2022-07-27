@@ -213,6 +213,9 @@ class Controller:
     def get_number_of_interpolating_points(self):
         return self.param_section['number_of_interpolating_points']
 
+    def get_use_spherical_pilr(self):
+        return self.param_section['use_spherical_pilr']
+
     def get_variables_values_for_aggregation(self, include_genes=True):
         variables = {}
         variables['shape_mode'] = self.get_shape_modes()
