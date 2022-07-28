@@ -32,7 +32,8 @@ class Parameterizer(io.DataProducer):
         coeffs_outer, centroid_outer = self.find_shcoeffs_and_centroid(alias_outer)
         coeffs_inner, centroid_inner = self.find_shcoeffs_and_centroid(alias_inner)
 
-        use_spherical_rep = self.control.get_use_spherical_pilr() # 
+        use_spherical_pilr = self.control.get_use_spherical_pilr() 
+        use_progressive_pilr = self.control.get_use_progressive_pilr()
 
         named_imgs = self.get_list_of_imgs_to_create_representation_for()
         
@@ -43,7 +44,8 @@ class Parameterizer(io.DataProducer):
             coeffs_nuc = coeffs_inner,
             centroid_nuc = centroid_inner,
             nisos = [n, n],
-            use_spherical_rep = use_spherical_rep,
+            use_spherical_rep = use_spherical_pilr,
+            use_prog_sampling = use_progressive_pilr,
             images_to_probe = named_imgs
         )
         return
