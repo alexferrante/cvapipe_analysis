@@ -82,6 +82,7 @@ class Aggregator(io.DataProducer):
         n = self.control.get_number_of_interpolating_points()
         alias_outer = self.control.get_outer_most_alias_to_parameterize()
         alias_inner = self.control.get_inner_most_alias_to_parameterize()
+        use_progressive_pilr = self.control.get_use_progressive_pilr()
         reader = self.read_map_point_mesh
         if self.row.shape_mode == "NdSphere":
             # Change the reader function in case we are aggregating
@@ -93,7 +94,8 @@ class Aggregator(io.DataProducer):
         coords_param, _ = cytoparam.parameterize_image_coordinates(
             seg_mem=(domain>0).astype(np.uint8),
             seg_nuc=(domain>1).astype(np.uint8),
-            lmax=self.control.get_lmax(), nisos=[n, n]
+            lmax=self.control.get_lmax(), nisos=[n, n],
+            use_prog_sampling=use_progressive_pilr
         )
         self.domain = domain
         self.origin = origin
