@@ -1,6 +1,7 @@
 import sys
 import argparse
 import numpy as np
+import numpy.ma as ma
 import pandas as pd
 from tqdm import tqdm
 from skimage import io as skio
@@ -23,12 +24,15 @@ class CorrelationCalculator(io.DataProducer):
     correlations on binary representations only.
     """
 
-    rep_length = 532610 # Need some work to make general
-
     def __init__(self, control):
         super().__init__(control)
         self.ncores = control.get_ncores()
         self.subfolder = 'correlation/values'
+        self.use_prog_pilr = control.get_use_progressive_pilr()
+        if not self.use_prog_pilr:
+            self.rep_length = 532610
+        else:
+            self.rep_length = 260260
 
     def read_representation_as_boolean(self, eindex):
         i, index = eindex
@@ -48,7 +52,11 @@ class CorrelationCalculator(io.DataProducer):
         )
 
     def correlate_all(self):
-        self.corrs = np.corrcoef(self.reps, dtype=np.float32)
+        if not self.use_prog_pilr:
+            self.corrs = np.corrcoef(self.reps, dtype=np.float32)
+        else:
+            self.corrs = ma.corrcoef(ma.masked_invalid(self.reps)).data
+
 
     def workflow(self):
         self.load_representations()
