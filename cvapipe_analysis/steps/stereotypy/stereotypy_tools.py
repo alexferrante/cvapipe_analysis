@@ -22,6 +22,7 @@ class StereotypyCalculator(io.DataProducer):
     def __init__(self, config):
         super().__init__(config)
         self.subfolder = 'stereotypy/values'
+        self.use_prog_pilr = self.control.get_use_progressive_pilr()
 
     def workflow(self):
         self.shuffle_target_cellids()
@@ -66,7 +67,7 @@ class StereotypyCalculator(io.DataProducer):
         rep2 = self.read_parameterized_intensity(indexes[1])
         rep1 = rep1[aliases.index(self.row.alias)]
         rep2 = rep2[aliases.index(self.row.alias)]
-        return self.correlate_representations(rep1, rep2)
+        return self.correlate_representations(rep1, rep2, self.use_prog_pilr)
 
     @staticmethod
     def append_configs_from_stereotypy_result_file_name(df, filename):

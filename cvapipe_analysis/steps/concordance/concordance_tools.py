@@ -21,13 +21,14 @@ class ConcordanceCalculator(io.DataProducer):
     def __init__(self, config):
         super().__init__(config)
         self.subfolder = 'concordance/values'
+        self.use_prog_pilr = self.control.get_use_progressive_pilr()
 
     def workflow(self):
         agg_rep1 = self.read_agg_parameterized_intensity(
             self.row.rename({'structure1': 'structure'}))
         agg_rep2 = self.read_agg_parameterized_intensity(
             self.row.rename({'structure2': 'structure'}))
-        self.row['Pearson'] = self.correlate_representations(agg_rep1, agg_rep2)
+        self.row['Pearson'] = self.correlate_representations(agg_rep1, agg_rep2, use_prog_pilr=self.use_prog_pilr)
         return
 
     def get_output_file_name(self):

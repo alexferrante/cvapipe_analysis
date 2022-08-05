@@ -3,6 +3,7 @@ import vtk
 import errno
 import concurrent
 import numpy as np
+import numpy.ma as ma
 import pandas as pd
 from tqdm import tqdm
 from pathlib import Path
@@ -381,7 +382,10 @@ class DataProducer(LocalStagingIO):
         return
 
     @staticmethod
-    def correlate_representations(rep1, rep2):
-        pcor = np.corrcoef(rep1.flatten(), rep2.flatten())
+    def correlate_representations(rep1, rep2, use_prog_pilr=False):
+        if not use_prog_pilr:
+            pcor = np.corrcoef(rep1.flatten(), rep2.flatten())
+        else:
+            pcor = ma.corrcoef(ma.masked_invalid(rep1.flatten()), ma.masked_invalid(rep2.flatten())).data
         # Returns Nan if rep1 or rep2 is empty.
         return pcor[0, 1]
