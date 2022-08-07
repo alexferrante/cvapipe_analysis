@@ -227,7 +227,7 @@ Two output folders are produced by this step:
 cvapipe_analysis parameterization run
 ```
 
-Here we use `aics-cytoparam` [(link)](https://github.com/AllenCell/aics-cytoparam) to create parameterizations for all of the single-cell data. This steps depends on step 4 and step 3.
+Here we use `aics-cytoparam` [(link)](https://github.com/AllenCell/aics-cytoparam) to create parameterizations for all of the single-cell data. This steps depends on step 3.
 
 One output folder is produced by this step: 
 
@@ -240,7 +240,7 @@ One output folder is produced by this step:
 cvapipe_analysis aggregation run
 ```
 
-This step average multiple cell PILRs and morphs them into idealized shapes from the shape space. This step depends on step 5.
+This step average multiple cell PILRs and morphs them into idealized shapes from the shape space. This step depends on step 3 and step 5.
 
 Two output folders are produced by this step: 
 
@@ -257,7 +257,7 @@ Two output folders are produced by this step:
 cvapipe_analysis correlation run
 ```
 
-This step computes the pair-wise correlation between PILRs of cells. This step depends on step 5.
+This step computes the pair-wise correlation between PILRs of cells. This step depends on step 5 and step 6.
 
 One output folder is produced by this step:
 
@@ -287,7 +287,7 @@ Two output folders are produced by this step:
 cvapipe_analysis concordance run
 ```
 
-This step calculates the extent to which the structure localized relative to all the other cellular structures. This step depends on step 6.
+This step calculates the extent to which the structure localized relative to all the other cellular structures. This step depends on step 6 and step 7.
 
 Two output folders are produced by this step:
 
