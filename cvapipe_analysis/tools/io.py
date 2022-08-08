@@ -88,8 +88,8 @@ class LocalStagingIO:
 
     def read_mean_shape_mesh(self, alias):
         sm = self.control.get_shape_modes()
-        mpIdc = self.control.get_center_map_point_index()
-        path = f"shapemode/avgshape/{alias}_{sm[0]}_{mpIdc}.vtk"
+        mpIdx = self.control.get_center_map_point_index()
+        path = f"shapemode/avgshape/{alias}_{sm[0]}_{mpIdx}.vtk"
         path = self.control.get_staging() / path
         if not path.is_file():
             raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), path)
