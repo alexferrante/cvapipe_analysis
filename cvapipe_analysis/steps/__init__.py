@@ -5,6 +5,7 @@ from .preprocessing import Preprocessing
 from .compute_features import ComputeFeatures
 from .shapemode import Shapemode
 from .parameterization import Parameterization
+from .morph_parameterization import MorphParameterization
 from .aggregation import Aggregation
 from .correlation import Correlation
 from .stereotypy import Stereotypy
@@ -18,6 +19,7 @@ __all__ = [
     "PcaPathCells",
     "ComputeFeatures",
     "Parameterization",
+    "MorphParameterization"
     "Aggregation",
     "Correlation",
     "Stereotypy",
