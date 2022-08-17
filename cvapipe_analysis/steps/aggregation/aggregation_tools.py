@@ -26,11 +26,13 @@ class Aggregator(io.DataProducer):
     def __init__(self, control):
         super().__init__(control)
         self.subfolder = 'aggregation/aggmorph'
+        self.use_morph_param = self.control.get_use_morphed_pilr()
 
     def workflow(self):
         self.set_agg_function()
         self.aggregate_parameterized_intensities()
-        self.morph_on_shapemode_shape()
+        if not self.use_morph_param:
+            self.morph_on_shapemode_shape()
 
     def get_output_file_name(self):
         return f"{self.get_prefix_from_row(self.row)}.tif"
@@ -38,9 +40,10 @@ class Aggregator(io.DataProducer):
     def save(self):
         n = len(self.CellIds)
         save_as = self.get_output_file_path()
-        # Save morphed cell
-        img = self.morphed
-        self.write_ome_tif(save_as, img, ['domain', save_as.stem], f"N{n}")
+        if not self.use_morph_param:
+            # Save morphed cell
+            img = self.morphed
+            self.write_ome_tif(save_as, img, ['domain', save_as.stem], f"N{n}")
         # Save agg representation
         img = self.aggregated_parameterized_intensity
         save_as = Path(str(save_as).replace('aggmorph', 'repsagg'))
@@ -59,8 +62,12 @@ class Aggregator(io.DataProducer):
         nc = self.control.get_ncores()
         if not len(self.CellIds):
             raise ValueError("No cells found for parameterization.")
-        with concurrent.futures.ProcessPoolExecutor(nc) as executor:
-            pints = list(executor.map(self.read_parameterized_intensity, self.CellIds))
+        if not self.use_morph_param:
+            with concurrent.futures.ProcessPoolExecutor(nc) as executor:
+                pints = list(executor.map(self.read_parameterized_intensity, self.CellIds))
+        else:
+            with concurrent.futures.ProcessPoolExecutor(nc) as executor:
+                pints = list(executor.map(self.read_morph_parameterized_intensity, self.CellIds))
         pints = np.array([p for p in pints if p is not None])
         pints_norm = self.normalize_representations(pints)
         agg_pint = self.agg_func(pints, axis=0)
@@ -71,7 +78,7 @@ class Aggregator(io.DataProducer):
         return
 
     def set_agg_function(self):
-        if self.row.aggtype == 'avg':
+        if self.row.aggtype == 'avg':            
             self.agg_func = np.mean
         elif self.row.aggtype == 'std':
             self.agg_func = np.std

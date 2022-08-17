@@ -109,6 +109,22 @@ class LocalStagingIO:
             return code, intensity_names
         return code
 
+    def read_morph_parameterized_intensity(self, index, return_intensity_names=False):
+        code, intensity_names = None, []
+        path = f"morphparameterization/morph-representations/{index}.tif"
+        path = self.control.get_staging() / path
+        if path.is_file():
+            code = AICSImage(path)
+            intensity_names = code.channel_names
+            code = code.data.squeeze()
+            if code.ndim == 2:
+                code = code.reshape(1, *code.shape)
+            if code.ndim == 4: # select only morphed channel
+                code = code[1,:,:,:]
+        if return_intensity_names:
+            return code, intensity_names
+        return code
+
     @staticmethod
     def normalize_representations(reps):
         # Expected shape is SCMN

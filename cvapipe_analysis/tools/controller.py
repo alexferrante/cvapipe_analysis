@@ -219,6 +219,9 @@ class Controller:
     def get_use_progressive_pilr(self):
         return self.param_section['use_progressive_sampling_pilr']
 
+    def get_use_morphed_pilr(self):
+        return self.config['aggregation']['use_morphed_pilr']
+
     def get_variables_values_for_aggregation(self, include_genes=True):
         variables = {}
         variables['shape_mode'] = self.get_shape_modes()
